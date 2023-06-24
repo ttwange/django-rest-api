@@ -8,12 +8,12 @@ from rest_framework.decorators import api_view
 
 
 @api_view(['GET','POST'])
-def drink_list(request):
+def drink_list(request,format=None):
     
     if request.method == 'GET':
       drinks = Drink.objects.all()
       serializer = DrinkSerializer(drinks, many=True)
-      return JsonResponse({'drinks':serializer.data})
+      return Response(serializer.data)
     
     if request.method == 'POST':
        serializer = DrinkSerializer(data=request.data)
@@ -22,7 +22,7 @@ def drink_list(request):
           return Response(serializer.data, status=status.HTTP_201_CREATED)
        
 @api_view(['GET','PUT','DELETE'])
-def drink_detail(request,id):
+def drink_detail(request, id, format=None):
    try:
       drink = DrinkSerializer.objects.get(pk=id)
    except Drink.DoesNotExist:
